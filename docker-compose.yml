@@ -1,0 +1,24 @@
+services:
+  image-worker:
+    build: ./remover
+    volumes:
+      - images-volume:/app/images
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 30s
+      retries: 3
+      start_period: 10s
+volumes:
+  images-volume:
