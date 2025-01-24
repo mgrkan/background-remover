@@ -8,6 +8,8 @@ RUN pip3 install --no-cache-dir --upgrade pip \
   && pip3 install --no-cache-dir -r requirements.txt
 ENV NUMBA_CACHE_DIR=/tmp
 
+RUN pip3 install boto3
+
 COPY src/ ./src
 RUN mkdir images
 

@@ -2,6 +2,7 @@
 import pika, sys, os
 import remover
 from models import RembgModel
+from upload import upload_file
 
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
@@ -12,6 +13,7 @@ def main():
         print(f" [x] Received {body}")
         try:
             remover.process_image("/app/src/" + body.decode("utf-8"), '/app/images/output.png', RembgModel())
+            upload_file('/app/images/output.png', 'output.png')
             print(" [x] Done")
             ch.basic_ack(delivery_tag = method.delivery_tag)
         except Exception as e:
